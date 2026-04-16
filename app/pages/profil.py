@@ -4,7 +4,7 @@ import sqlite3
 import plotly.graph_objects as go
 from pathlib import Path
 
-DB_PATH = Path("database/scouting.db")
+DB_PATH = Path(__file__).parent.parent.parent / "database" / "scouting_prod.db"
 st.set_page_config(page_title="Profil Joueur", layout="wide", page_icon="⚽")
 
 st.markdown("""

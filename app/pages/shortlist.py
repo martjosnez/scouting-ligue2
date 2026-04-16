@@ -3,7 +3,7 @@ import pandas as pd
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path("database/scouting.db")
+DB_PATH = Path(__file__).parent.parent.parent / "database" / "scouting_prod.db"
 
 st.set_page_config(page_title="Shortlist", layout="wide")
 st.title("📋 Shortlist — Cibles de scouting")
