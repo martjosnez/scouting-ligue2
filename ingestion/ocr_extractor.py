@@ -6,6 +6,8 @@ Usage :
     from ingestion.ocr_extractor import extract_from_screenshot
     data = extract_from_screenshot("screenshots/nancy_2025.png", equipe="Nancy", saison="2025/26")
 """
+from dotenv import load_dotenv
+load_dotenv()
 import anthropic
 import base64
 import json
