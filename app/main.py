@@ -19,33 +19,66 @@ st.markdown("""
 [data-testid="stAppViewContainer"] { background: #0A0C10; }
 [data-testid="stSidebar"] { background: #0F1218 !important; border-right: 1px solid rgba(255,255,255,0.06); }
 [data-testid="stSidebarNav"] { display: none !important; }
-.block-container { padding-top: 3rem !important; max-width: 1200px; }
-.hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #E8281A; margin-bottom: 12px; }
-.hero-title { font-size: 80px; font-weight: 900; color: #F0F2F5; line-height: 1; letter-spacing: -2px; margin-bottom: 10px; white-space: nowrap; }
+.block-container { padding-top: 6rem !important; padding-left: 4rem !important; padding-right: 4rem !important; max-width: 1300px; }
+
+.hero-eyebrow {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: #E8281A; margin-bottom: 16px;
+}
+.hero-title {
+    font-size: 96px; font-weight: 900;
+    color: #F0F2F5; line-height: 1;
+    letter-spacing: -3px; margin-bottom: 16px;
+    white-space: nowrap;
+}
 .hero-title span { color: #E8281A; }
-.hero-desc { font-size: 14px; color: #6B7280; margin-bottom: 36px; }
-.kpi-row { display: flex; gap: 12px; margin-bottom: 44px; }
-.kpi-box { background: #141720; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 16px 28px; min-width: 140px; }
-.kpi-box-val { font-size: 36px; font-weight: 900; color: #E8281A; line-height: 1; }
-.kpi-box-lbl { font-size: 11px; font-weight: 700; color: #4B5563; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 5px; }
-.sidebar-logo { text-align: center; padding: 20px 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; }
+.hero-desc {
+    font-size: 16px; color: #6B7280;
+    margin-bottom: 48px; letter-spacing: 0.5px;
+}
+
+.kpi-row { display: flex; gap: 16px; margin-bottom: 56px; }
+.kpi-box {
+    background: #141720;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; padding: 20px 36px; min-width: 160px;
+}
+.kpi-box-val {
+    font-size: 42px; font-weight: 900;
+    color: #E8281A; line-height: 1;
+}
+.kpi-box-lbl {
+    font-size: 12px; font-weight: 700;
+    color: #4B5563; text-transform: uppercase;
+    letter-spacing: 2px; margin-top: 6px;
+}
+
+.sidebar-logo {
+    text-align: center; padding: 20px 12px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px;
+}
 .sidebar-logo img { width: 100px; border-radius: 10px; margin-bottom: 12px; }
 .sidebar-club { font-size: 14px; font-weight: 800; color: #F0F2F5; }
 .sidebar-season { font-size: 10px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
-.nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.nav-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-radius: 8px;
+    color: #9CA3AF; font-size: 14px; font-weight: 600; margin-bottom: 4px;
+}
 .nav-link-icon { font-size: 18px; }
 
 div[data-testid="stButton"] button {
     background: #141720 !important;
     border: 1px solid rgba(255,255,255,0.07) !important;
-    border-radius: 16px !important;
+    border-radius: 18px !important;
     color: #F0F2F5 !important;
-    font-size: 18px !important;
+    font-size: 20px !important;
     font-weight: 800 !important;
-    padding: 48px 24px !important;
+    padding: 56px 24px !important;
     width: 100% !important;
     transition: all 0.2s !important;
-    line-height: 1.6 !important;
+    line-height: 1.8 !important;
 }
 div[data-testid="stButton"] button:hover {
     border-color: rgba(232,40,26,0.6) !important;
