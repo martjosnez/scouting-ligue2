@@ -28,18 +28,30 @@ st.markdown("""
 .kpi-box { background: #141720; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 16px 28px; min-width: 140px; }
 .kpi-box-val { font-size: 36px; font-weight: 900; color: #E8281A; line-height: 1; }
 .kpi-box-lbl { font-size: 11px; font-weight: 700; color: #4B5563; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 5px; }
-.nav-box { background: #141720; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 36px 24px; text-align: center; transition: all 0.2s; }
-.nav-box-icon { font-size: 44px; margin-bottom: 16px; display: block; }
-.nav-box-title { font-size: 20px; font-weight: 800; color: #F0F2F5; margin-bottom: 8px; }
-.nav-box-desc { font-size: 13px; color: #6B7280; }
 .sidebar-logo { text-align: center; padding: 20px 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; }
 .sidebar-logo img { width: 100px; border-radius: 10px; margin-bottom: 12px; }
-.sidebar-club { font-size: 14px; font-weight: 800; color: #F0F2F5; letter-spacing: 0.5px; }
+.sidebar-club { font-size: 14px; font-weight: 800; color: #F0F2F5; }
 .sidebar-season { font-size: 10px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
-.nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 600; margin-bottom: 4px; cursor: pointer; transition: all 0.15s; }
-.nav-link:hover { background: rgba(255,255,255,0.05); color: #F0F2F5; }
+.nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
 .nav-link-icon { font-size: 18px; }
-div[data-testid="stButton"] button { background: transparent !important; border: none !important; padding: 0 !important; height: auto !important; width: 100% !important; color: transparent !important; font-size: 0 !important; position: absolute; top: 0; left: 0; cursor: pointer !important; }
+
+div[data-testid="stButton"] button {
+    background: #141720 !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    border-radius: 16px !important;
+    color: #F0F2F5 !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    padding: 48px 24px !important;
+    width: 100% !important;
+    transition: all 0.2s !important;
+    line-height: 1.6 !important;
+}
+div[data-testid="stButton"] button:hover {
+    border-color: rgba(232,40,26,0.6) !important;
+    background: rgba(232,40,26,0.08) !important;
+    color: #E8281A !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -82,35 +94,15 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
+
 with col1:
-    st.markdown("""
-    <div class="nav-box">
-        <span class="nav-box-icon">👤</span>
-        <div class="nav-box-title">Profil joueur</div>
-        <div class="nav-box-desc">Analyse individuelle complete</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("p", key="btn_profil", use_container_width=True):
+    if st.button("👤\n\nProfil joueur\nAnalyse individuelle", key="btn_profil", use_container_width=True):
         st.switch_page("pages/profil.py")
 
 with col2:
-    st.markdown("""
-    <div class="nav-box">
-        <span class="nav-box-icon">⚖️</span>
-        <div class="nav-box-title">Comparaison</div>
-        <div class="nav-box-desc">Face a face entre deux joueurs</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("c", key="btn_comp", use_container_width=True):
+    if st.button("⚖️\n\nComparaison\nFace a face", key="btn_comp", use_container_width=True):
         st.switch_page("pages/comparaison.py")
 
 with col3:
-    st.markdown("""
-    <div class="nav-box">
-        <span class="nav-box-icon">📋</span>
-        <div class="nav-box-title">Shortlist</div>
-        <div class="nav-box-desc">Cibles de recrutement</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("s", key="btn_short", use_container_width=True):
+    if st.button("📋\n\nShortlist\nCibles de recrutement", key="btn_short", use_container_width=True):
         st.switch_page("pages/shortlist.py")
