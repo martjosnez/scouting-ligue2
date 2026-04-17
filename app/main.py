@@ -18,58 +18,28 @@ st.markdown("""
 * { font-family: 'Raleway', sans-serif !important; }
 [data-testid="stAppViewContainer"] { background: #0A0C10; }
 [data-testid="stSidebar"] { background: #0F1218 !important; border-right: 1px solid rgba(255,255,255,0.06); }
+[data-testid="stSidebarNav"] { display: none !important; }
 .block-container { padding-top: 3rem !important; max-width: 1200px; }
-
-.hero-title {
-    font-size: 80px; font-weight: 900;
-    color: #F0F2F5; line-height: 1;
-    letter-spacing: -2px; margin-bottom: 10px;
-    white-space: nowrap;
-}
+.hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #E8281A; margin-bottom: 12px; }
+.hero-title { font-size: 80px; font-weight: 900; color: #F0F2F5; line-height: 1; letter-spacing: -2px; margin-bottom: 10px; white-space: nowrap; }
 .hero-title span { color: #E8281A; }
-.hero-eyebrow {
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 4px; text-transform: uppercase;
-    color: #E8281A; margin-bottom: 12px;
-}
 .hero-desc { font-size: 14px; color: #6B7280; margin-bottom: 36px; }
-
 .kpi-row { display: flex; gap: 12px; margin-bottom: 44px; }
-.kpi-box {
-    background: #141720; border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px; padding: 16px 28px; min-width: 140px;
-}
+.kpi-box { background: #141720; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 16px 28px; min-width: 140px; }
 .kpi-box-val { font-size: 36px; font-weight: 900; color: #E8281A; line-height: 1; }
 .kpi-box-lbl { font-size: 11px; font-weight: 700; color: #4B5563; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 5px; }
-
-.nav-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.nav-box {
-    background: #141720; border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 16px; padding: 36px 24px; text-align: center;
-    transition: all 0.2s;
-}
-.nav-box:hover { border-color: rgba(232,40,26,0.5); background: rgba(232,40,26,0.06); }
+.nav-box { background: #141720; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 36px 24px; text-align: center; transition: all 0.2s; }
 .nav-box-icon { font-size: 44px; margin-bottom: 16px; display: block; }
 .nav-box-title { font-size: 20px; font-weight: 800; color: #F0F2F5; margin-bottom: 8px; }
 .nav-box-desc { font-size: 13px; color: #6B7280; }
-
-.sidebar-logo { text-align: center; padding: 20px 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px; }
+.sidebar-logo { text-align: center; padding: 20px 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; }
 .sidebar-logo img { width: 100px; border-radius: 10px; margin-bottom: 12px; }
 .sidebar-club { font-size: 14px; font-weight: 800; color: #F0F2F5; letter-spacing: 0.5px; }
 .sidebar-season { font-size: 10px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
-
-.nav-link { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 600; margin-bottom: 4px; cursor: pointer; }
+.nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 600; margin-bottom: 4px; cursor: pointer; transition: all 0.15s; }
 .nav-link:hover { background: rgba(255,255,255,0.05); color: #F0F2F5; }
-.nav-link-icon { font-size: 16px; }
-
-div[data-testid="stButton"] button {
-    background: transparent !important; border: none !important;
-    padding: 0 !important; height: auto !important; width: 100% !important;
-    color: transparent !important; font-size: 0 !important;
-    position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important;
-    cursor: pointer !important;
-}
-.card-wrap { position: relative; }
+.nav-link-icon { font-size: 18px; }
+div[data-testid="stButton"] button { background: transparent !important; border: none !important; padding: 0 !important; height: auto !important; width: 100% !important; color: transparent !important; font-size: 0 !important; position: absolute; top: 0; left: 0; cursor: pointer !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -117,7 +87,7 @@ with col1:
     <div class="nav-box">
         <span class="nav-box-icon">👤</span>
         <div class="nav-box-title">Profil joueur</div>
-        <div class="nav-box-desc">Analyse individuelle complète</div>
+        <div class="nav-box-desc">Analyse individuelle complete</div>
     </div>
     """, unsafe_allow_html=True)
     if st.button("p", key="btn_profil", use_container_width=True):
@@ -128,7 +98,7 @@ with col2:
     <div class="nav-box">
         <span class="nav-box-icon">⚖️</span>
         <div class="nav-box-title">Comparaison</div>
-        <div class="nav-box-desc">Face à face entre deux joueurs</div>
+        <div class="nav-box-desc">Face a face entre deux joueurs</div>
     </div>
     """, unsafe_allow_html=True)
     if st.button("c", key="btn_comp", use_container_width=True):
