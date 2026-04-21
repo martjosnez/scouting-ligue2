@@ -17,10 +17,10 @@ st.markdown("""
 [data-testid="stSidebarNav"] { display: none !important; }
 .block-container { padding-top: 4rem !important; padding-left: 3rem !important; padding-right: 3rem !important; }
 .page-title { font-size: 48px; font-weight: 900; color: #F0F2F5; line-height: 1.1; margin-bottom: 6px; letter-spacing: -1px; }
-.page-sub { font-size: 13px; color: #6B7280; margin-bottom: 32px; text-transform: uppercase; letter-spacing: 1.5px; }
-.result-count { font-size: 13px; color: #6B7280; margin-bottom: 16px; }
-.result-count span { color: #E8281A; font-weight: 700; }
-.filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #6B7280; margin-bottom: 8px; margin-top: 16px; }
+.page-sub { font-size: 13px; color: #6B7280; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
+.result-count { font-size: 14px; color: #6B7280; margin-bottom: 20px; padding: 12px 16px; background: #1C2028; border-radius: 8px; border: 1px solid rgba(255,255,255,0.07); }
+.result-count span { color: #E8281A; font-weight: 700; font-size: 18px; }
+.filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #6B7280; margin-bottom: 6px; margin-top: 14px; }
 .sidebar-logo { text-align: center; padding: 20px 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px; }
 .sidebar-logo img { width: 90px; border-radius: 10px; margin-bottom: 10px; }
 .sidebar-club { font-size: 15px; font-weight: 700; color: #F0F2F5; }
@@ -37,6 +37,7 @@ div[data-testid="stButton"] button:hover {
     color: #F0F2F5 !important;
 }
 div[data-testid="stDataFrame"] { border-radius: 12px; overflow: hidden; }
+thead tr th { background: #1C2028 !important; color: #9CA3AF !important; font-size: 11px !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -46,7 +47,7 @@ if not DB_PATH.exists():
 
 conn = sqlite3.connect(DB_PATH)
 joueurs = pd.read_sql("""
-    SELECT j.nom, j.poste, j.role, j.age, j.valeur_m_eur,
+    SELECT DISTINCT j.nom, j.poste, j.role, j.age, j.valeur_m_eur,
            e.nom as equipe, s.minutes,
            s.proj_cpm_total, s.cpm_total, s.cpm_scored, s.cpm_conc,
            s.bpm_xgs0_net, s.gapm_xgs0_net, s.opv_p_total
@@ -56,9 +57,7 @@ joueurs = pd.read_sql("""
 """, conn)
 conn.close()
 
-if joueurs.empty:
-    st.warning("Aucun joueur en base.")
-    st.stop()
+joueurs = joueurs.drop_duplicates(subset=["nom", "equipe"])
 
 with st.sidebar:
     st.markdown(f"""
@@ -95,13 +94,12 @@ with st.sidebar:
     age_range = st.slider("Age", age_min, age_max, (age_min, age_max), step=0.5, label_visibility="collapsed")
 
     st.markdown('<div class="filter-title">Minutes minimum</div>', unsafe_allow_html=True)
-    mins_min = int(joueurs["minutes"].min())
-    mins_max = int(joueurs["minutes"].max())
-    mins_seuil = st.slider("Minutes", mins_min, mins_max, mins_min, step=100, label_visibility="collapsed")
+    mins_max_val = int(joueurs["minutes"].max())
+    mins_seuil = st.slider("Minutes", 0, mins_max_val, 0, step=100, label_visibility="collapsed")
 
     st.markdown('<div class="filter-title">Valeur TM max (M EUR)</div>', unsafe_allow_html=True)
-    val_max = float(joueurs["valeur_m_eur"].max())
-    val_seuil = st.slider("Valeur", 0.0, val_max, val_max, step=0.1, label_visibility="collapsed")
+    val_max = float(joueurs["valeur_m_eur"].dropna().max())
+    val_seuil = st.slider("Valeur", 0.0, val_max, val_max, step=0.5, label_visibility="collapsed")
 
     st.markdown('<div class="filter-title">Trier par</div>', unsafe_allow_html=True)
     tri_options = {
@@ -125,26 +123,26 @@ if postes_sel:
 df = df[(df["age"] >= age_range[0]) & (df["age"] <= age_range[1])]
 df = df[df["minutes"] >= mins_seuil]
 df = df[df["valeur_m_eur"] <= val_seuil]
-df = df.sort_values(tri_col, ascending=False)
+df = df.sort_values(tri_col, ascending=False).reset_index(drop=True)
 
 st.markdown('<div class="page-title">Recherche</div>', unsafe_allow_html=True)
-st.markdown('<div class="page-sub">Filtres & classement des joueurs</div>', unsafe_allow_html=True)
+st.markdown('<div class="page-sub">Filtres et classement des joueurs</div>', unsafe_allow_html=True)
 st.markdown('<div class="result-count"><span>' + str(len(df)) + '</span> joueurs trouvés sur ' + str(len(joueurs)) + '</div>', unsafe_allow_html=True)
 
 df_display = df[[
-    "nom", "equipe", "poste", "role", "age", "valeur_m_eur",
-    "minutes", "proj_cpm_total", "cpm_total", "cpm_scored",
-    "cpm_conc", "bpm_xgs0_net", "gapm_xgs0_net", "opv_p_total"
+    "nom", "equipe", "poste", "age", "valeur_m_eur",
+    "minutes", "proj_cpm_total", "cpm_total",
+    "bpm_xgs0_net", "gapm_xgs0_net", "opv_p_total"
 ]].copy()
 
 df_display.columns = [
-    "Nom", "Equipe", "Poste", "Role", "Age", "Valeur (M)",
-    "Minutes", "Proj CPM", "CPM Total", "CPM Scored",
-    "CPM Conc.", "BPM xGS0", "GAPM xGS0", "OPV-P"
+    "Nom", "Equipe", "Poste", "Age", "Valeur (M)",
+    "Minutes", "Proj CPM", "CPM Total",
+    "BPM xGS0", "GAPM xGS0", "OPV-P"
 ]
 
-for col in ["Proj CPM","CPM Total","CPM Scored","CPM Conc.","BPM xGS0","GAPM xGS0","OPV-P"]:
-    df_display[col] = df_display[col].apply(lambda x: round(x) if pd.notna(x) else "-")
+for col in ["Proj CPM", "CPM Total", "BPM xGS0", "GAPM xGS0", "OPV-P"]:
+    df_display[col] = df_display[col].apply(lambda x: round(x) if pd.notna(x) else 0)
 
 st.dataframe(
     df_display,
@@ -152,11 +150,16 @@ st.dataframe(
     hide_index=True,
     height=600,
     column_config={
-        "Proj CPM": st.column_config.NumberColumn("Proj CPM", help="Projection CPM Total"),
-        "CPM Total": st.column_config.NumberColumn("CPM Total"),
-        "OPV-P": st.column_config.NumberColumn("OPV-P"),
-        "BPM xGS0": st.column_config.NumberColumn("BPM xGS0"),
+        "Proj CPM": st.column_config.ProgressColumn(
+            "Proj CPM", min_value=0, max_value=100, format="%d"),
+        "CPM Total": st.column_config.ProgressColumn(
+            "CPM Total", min_value=0, max_value=100, format="%d"),
+        "OPV-P": st.column_config.ProgressColumn(
+            "OPV-P", min_value=0, max_value=100, format="%d"),
+        "BPM xGS0": st.column_config.ProgressColumn(
+            "BPM xGS0", min_value=0, max_value=100, format="%d"),
         "Valeur (M)": st.column_config.NumberColumn("Valeur (M)", format="%.1f M"),
         "Age": st.column_config.NumberColumn("Age", format="%.1f"),
+        "Minutes": st.column_config.NumberColumn("Minutes"),
     }
 )
