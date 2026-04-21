@@ -2,16 +2,19 @@ import sqlite3
 
 conn = sqlite3.connect('database/scouting.db')
 
-doublons = conn.execute('''
-    SELECT j.nom, e.nom as equipe, COUNT(*) as nb
-    FROM joueurs j
-    JOIN equipes e ON j.equipe_id = e.id
-    GROUP BY j.nom, j.equipe_id
-    HAVING COUNT(*) > 1
-''').fetchall()
+deleted = conn.execute('''
+    DELETE FROM stats_match
+    WHERE id NOT IN (
+        SELECT MIN(id)
+        FROM stats_match
+        GROUP BY joueur_id
+    )
+''')
 
-print('Doublons trouves: ' + str(len(doublons)))
-for d in doublons:
-    print(d)
+conn.commit()
+print('Doublons supprimes: ' + str(deleted.rowcount))
+
+total = conn.execute('SELECT COUNT(*) FROM stats_match').fetchone()[0]
+print('Total stats_match apres nettoyage: ' + str(total))
 
 conn.close()
