@@ -24,6 +24,11 @@ st.markdown("""
 .player-box-sub { font-size: 12px; color: #6B7280; }
 .vs-label { font-size: 22px; font-weight: 900; color: #E8281A; text-align: center; padding-top: 22px; }
 .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #6B7280; margin: 32px 0 18px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.kpi-card { background: #1C2028; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 16px 20px; text-align: center; }
+.kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #6B7280; margin-bottom: 8px; }
+.kpi-value { font-size: 30px; font-weight: 900; color: #F0F2F5; line-height: 1; }
+.kpi-value-a { font-size: 30px; font-weight: 900; color: #E8281A; line-height: 1; }
+.kpi-value-b { font-size: 30px; font-weight: 900; color: #14b8a6; line-height: 1; }
 .sidebar-logo { text-align: center; padding: 20px 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px; }
 .sidebar-logo img { width: 90px; border-radius: 10px; margin-bottom: 10px; }
 .sidebar-club { font-size: 15px; font-weight: 700; color: #F0F2F5; }
@@ -49,7 +54,8 @@ if not DB_PATH.exists():
 conn = sqlite3.connect(DB_PATH)
 joueurs = pd.read_sql("""
     SELECT j.nom, j.poste, j.age, e.nom as equipe,
-           s.minutes, s.cpm_total, s.cpm_scored, s.cpm_conc,
+           s.minutes, s.proj_cpm_total,
+           s.cpm_total, s.cpm_scored, s.cpm_conc,
            s.bpm_xgs0_net, s.gapm_xgs0_net, s.opv_p_total
     FROM joueurs j
     JOIN equipes e ON j.equipe_id = e.id
@@ -61,8 +67,10 @@ if joueurs.empty:
     st.warning("Aucun joueur en base.")
     st.stop()
 
-METRIQUES = ["cpm_total","cpm_scored","cpm_conc","bpm_xgs0_net","gapm_xgs0_net","opv_p_total"]
-LABELS    = ["CPM Total","CPM Scored","CPM Conc.","BPM xGS0","GAPM xGS0","OPV-P"]
+METRIQUES = ["proj_cpm_total","cpm_total","cpm_scored","cpm_conc","bpm_xgs0_net","gapm_xgs0_net","opv_p_total"]
+LABELS    = ["Proj CPM","CPM Total","CPM Scored","CPM Conc.","BPM xGS0","GAPM xGS0","OPV-P"]
+METRIQUES_RADAR = ["cpm_total","cpm_scored","cpm_conc","bpm_xgs0_net","gapm_xgs0_net","opv_p_total"]
+LABELS_RADAR    = ["CPM Total","CPM Scored","CPM Conc.","BPM xGS0","GAPM xGS0","OPV-P"]
 
 with st.sidebar:
     st.markdown(f"""
@@ -102,19 +110,28 @@ with c1:
 with c2:
     st.markdown('<div class="player-box"><div class="player-box-name">' + str(j2["nom"]) + '</div><div class="player-box-sub">' + str(j2["equipe"]) + ' · ' + str(j2["poste"] or "-") + ' · ' + str(j2["age"]) + ' ans</div></div>', unsafe_allow_html=True)
 
+st.markdown('<div class="section-title">Proj CPM Total</div>', unsafe_allow_html=True)
+kc1, kc2 = st.columns(2)
+proj1 = str(round(j1["proj_cpm_total"])) if pd.notna(j1["proj_cpm_total"]) else "-"
+proj2 = str(round(j2["proj_cpm_total"])) if pd.notna(j2["proj_cpm_total"]) else "-"
+with kc1:
+    st.markdown('<div class="kpi-card"><div class="kpi-label">' + str(j1["nom"]) + '</div><div class="kpi-value-a">' + proj1 + '</div></div>', unsafe_allow_html=True)
+with kc2:
+    st.markdown('<div class="kpi-card"><div class="kpi-label">' + str(j2["nom"]) + '</div><div class="kpi-value-b">' + proj2 + '</div></div>', unsafe_allow_html=True)
+
 st.markdown('<div class="section-title">Radar comparatif</div>', unsafe_allow_html=True)
 
 fig = go.Figure()
 fig.add_trace(go.Scatterpolar(
-    r=[j1[m] if pd.notna(j1[m]) else 0 for m in METRIQUES] + [j1[METRIQUES[0]]],
-    theta=LABELS + [LABELS[0]],
+    r=[j1[m] if pd.notna(j1[m]) else 0 for m in METRIQUES_RADAR] + [j1[METRIQUES_RADAR[0]]],
+    theta=LABELS_RADAR + [LABELS_RADAR[0]],
     fill="toself", name=joueur1,
     fillcolor="rgba(232,40,26,0.1)",
     line=dict(color="#E8281A", width=2),
 ))
 fig.add_trace(go.Scatterpolar(
-    r=[j2[m] if pd.notna(j2[m]) else 0 for m in METRIQUES] + [j2[METRIQUES[0]]],
-    theta=LABELS + [LABELS[0]],
+    r=[j2[m] if pd.notna(j2[m]) else 0 for m in METRIQUES_RADAR] + [j2[METRIQUES_RADAR[0]]],
+    theta=LABELS_RADAR + [LABELS_RADAR[0]],
     fill="toself", name=joueur2,
     fillcolor="rgba(20,184,166,0.1)",
     line=dict(color="#14b8a6", width=2),
