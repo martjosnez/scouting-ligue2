@@ -7,6 +7,8 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent.parent.parent / "database" / "scouting_prod.db"
 st.set_page_config(page_title="Profil Joueur", layout="wide", page_icon="⚽")
 
+LOGO_URL = "https://raw.githubusercontent.com/martjosnez/scouting-ligue2/main/app/assets/logo_nancy.jpg"
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
@@ -15,46 +17,34 @@ st.markdown("""
 [data-testid="stSidebar"] { background: #161920 !important; border-right: 1px solid rgba(255,255,255,0.06); }
 [data-testid="stSidebarNav"] { display: none !important; }
 .block-container { padding-top: 4rem !important; padding-left: 3rem !important; padding-right: 3rem !important; }
-
-.player-name {
-    font-size: 48px; font-weight: 900;
-    color: #F0F2F5; line-height: 1.1;
-    margin-bottom: 14px; letter-spacing: -1px;
-}
-.badge {
-    display: inline-block; padding: 5px 14px;
-    border-radius: 20px; font-size: 12px; font-weight: 600;
-    margin-right: 6px; margin-bottom: 8px; border: 1px solid;
-}
+.player-name { font-size: 48px; font-weight: 900; color: #F0F2F5; line-height: 1.1; margin-bottom: 14px; letter-spacing: -1px; }
+.badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-right: 6px; margin-bottom: 8px; border: 1px solid; }
 .badge-red { background: rgba(232,40,26,0.15); color: #E8281A; border-color: rgba(232,40,26,0.35); }
 .badge-gray { background: rgba(255,255,255,0.05); color: #9CA3AF; border-color: rgba(255,255,255,0.1); }
-
-.kpi-card {
-    background: #1C2028; border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px; padding: 20px 24px; text-align: center;
-}
+.kpi-card { background: #1C2028; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 20px 24px; text-align: center; }
 .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #6B7280; margin-bottom: 8px; }
 .kpi-value { font-size: 38px; font-weight: 900; color: #F0F2F5; line-height: 1; }
-
-.section-title {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 2px; color: #6B7280; margin: 32px 0 18px;
-    padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07);
-}
+.section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #6B7280; margin: 32px 0 18px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07); }
 .bar-wrap { margin-bottom: 14px; }
 .bar-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #9CA3AF; }
 .bar-track { background: rgba(255,255,255,0.06); border-radius: 4px; height: 6px; overflow: hidden; }
-
-.sidebar-logo { text-align: center; padding: 20px 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; }
+.sidebar-logo { text-align: center; padding: 20px 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px; }
 .sidebar-logo img { width: 90px; border-radius: 10px; margin-bottom: 10px; }
-.sidebar-club { font-size: 14px; font-weight: 700; color: #F0F2F5; }
-.sidebar-season { font-size: 10px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
-.nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-.nav-link-icon { font-size: 16px; }
+.sidebar-club { font-size: 15px; font-weight: 700; color: #F0F2F5; }
+.sidebar-season { font-size: 11px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
+div[data-testid="stButton"] button {
+    background: transparent !important; border: none !important;
+    color: #9CA3AF !important; font-size: 15px !important;
+    font-weight: 500 !important; text-align: left !important;
+    padding: 10px 14px !important; border-radius: 8px !important;
+    width: 100% !important;
+}
+div[data-testid="stButton"] button:hover {
+    background: rgba(255,255,255,0.05) !important;
+    color: #F0F2F5 !important;
+}
 </style>
 """, unsafe_allow_html=True)
-
-LOGO_URL = "https://raw.githubusercontent.com/martjosnez/scouting-ligue2/main/app/assets/logo_nancy.jpg"
 
 if not DB_PATH.exists():
     st.warning("Base de donnees vide.")
@@ -86,12 +76,16 @@ with st.sidebar:
         <div class="sidebar-club">AS Nancy Lorraine</div>
         <div class="sidebar-season">Saison 2025 / 26</div>
     </div>
-    <div class="nav-link"><span class="nav-link-icon">🏠</span> Accueil</div>
-    <div class="nav-link"><span class="nav-link-icon">👤</span> Profil joueur</div>
-    <div class="nav-link"><span class="nav-link-icon">⚖️</span> Comparaison</div>
-    <div class="nav-link"><span class="nav-link-icon">📋</span> Shortlist</div>
-    <br>
     """, unsafe_allow_html=True)
+    if st.button("🏠  Accueil", use_container_width=True, key="nav_home"):
+        st.switch_page("main.py")
+    if st.button("👤  Profil joueur", use_container_width=True, key="nav_profil"):
+        st.switch_page("pages/profil.py")
+    if st.button("⚖️  Comparaison", use_container_width=True, key="nav_comp"):
+        st.switch_page("pages/comparaison.py")
+    if st.button("📋  Shortlist", use_container_width=True, key="nav_short"):
+        st.switch_page("pages/shortlist.py")
+    st.markdown("<br>", unsafe_allow_html=True)
     equipes = ["Toutes"] + sorted(joueurs["equipe"].unique().tolist())
     eq = st.selectbox("Equipe", equipes)
     df = joueurs if eq == "Toutes" else joueurs[joueurs["equipe"] == eq]
