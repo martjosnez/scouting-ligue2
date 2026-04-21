@@ -88,6 +88,8 @@ with st.sidebar:
         st.switch_page("pages/comparaison.py")
     if st.button("📋  Shortlist", use_container_width=True, key="nav_short"):
         st.switch_page("pages/shortlist.py")
+    if st.button("🔍  Recherche", use_container_width=True, key="nav_recherche"):
+        st.switch_page("pages/recherche.py")
 
 st.markdown('<div class="page-title">Comparaison</div>', unsafe_allow_html=True)
 st.markdown('<div class="page-sub">Face a face entre deux joueurs</div>', unsafe_allow_html=True)

@@ -87,6 +87,8 @@ with st.sidebar:
         st.switch_page("pages/comparaison.py")
     if st.button("📋  Shortlist", use_container_width=True, key="nav_short"):
         st.switch_page("pages/shortlist.py")
+    if st.button("🔍  Recherche", use_container_width=True, key="nav_recherche"):
+        st.switch_page("pages/recherche.py")
     st.markdown("<br>", unsafe_allow_html=True)
     equipes = ["Toutes"] + sorted(joueurs["equipe"].unique().tolist())
     eq = st.selectbox("Equipe", equipes)

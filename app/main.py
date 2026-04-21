@@ -76,6 +76,8 @@ with st.sidebar:
         st.switch_page("pages/comparaison.py")
     if st.button("📋  Shortlist", use_container_width=True, key="nav_short"):
         st.switch_page("pages/shortlist.py")
+    if st.button("🔍  Recherche", use_container_width=True, key="nav_recherche"):
+        st.switch_page("pages/recherche.py")
 
 conn = sqlite3.connect(DB_PATH) if DB_PATH.exists() else None
 nb_joueurs = 0
