@@ -24,6 +24,7 @@ st.markdown("""
 .kpi-card { background: #1C2028; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 20px 24px; text-align: center; }
 .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #6B7280; margin-bottom: 8px; }
 .kpi-value { font-size: 38px; font-weight: 900; color: #F0F2F5; line-height: 1; }
+.kpi-value-proj { font-size: 38px; font-weight: 900; color: #E8281A; line-height: 1; }
 .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #6B7280; margin: 32px 0 18px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07); }
 .bar-wrap { margin-bottom: 14px; }
 .bar-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #9CA3AF; }
@@ -54,6 +55,7 @@ conn = sqlite3.connect(DB_PATH)
 joueurs = pd.read_sql("""
     SELECT j.id, j.nom, j.poste, j.role, j.age, j.valeur_m_eur,
            e.nom as equipe, s.minutes,
+           s.proj_cpm_total,
            s.cpm_total, s.cpm_scored, s.cpm_conc,
            s.bpm_xgs0_net, s.gapm_xgs0_net, s.opv_p_total
     FROM joueurs j
@@ -107,14 +109,17 @@ st.markdown(badges, unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
 mins = int(j["minutes"]) if pd.notna(j["minutes"]) else 0
-k1, k2, k3, k4 = st.columns(4)
-for col, label, val in [
-    (k1, "Minutes", str(mins) + "'"),
-    (k2, "CPM Total", str(round(j["cpm_total"])) if pd.notna(j["cpm_total"]) else "-"),
-    (k3, "OPV-P", str(round(j["opv_p_total"])) if pd.notna(j["opv_p_total"]) else "-"),
-    (k4, "BPM xGS0", str(round(j["bpm_xgs0_net"])) if pd.notna(j["bpm_xgs0_net"]) else "-"),
-]:
-    col.markdown('<div class="kpi-card"><div class="kpi-label">' + label + '</div><div class="kpi-value">' + val + '</div></div>', unsafe_allow_html=True)
+proj = str(round(j["proj_cpm_total"])) if pd.notna(j["proj_cpm_total"]) else "-"
+cpm = str(round(j["cpm_total"])) if pd.notna(j["cpm_total"]) else "-"
+ovp = str(round(j["opv_p_total"])) if pd.notna(j["opv_p_total"]) else "-"
+bpm = str(round(j["bpm_xgs0_net"])) if pd.notna(j["bpm_xgs0_net"]) else "-"
+
+k1, k2, k3, k4, k5 = st.columns(5)
+k1.markdown('<div class="kpi-card"><div class="kpi-label">Minutes</div><div class="kpi-value">' + str(mins) + "'</div></div>", unsafe_allow_html=True)
+k2.markdown('<div class="kpi-card"><div class="kpi-label">Proj CPM Total</div><div class="kpi-value-proj">' + proj + '</div></div>', unsafe_allow_html=True)
+k3.markdown('<div class="kpi-card"><div class="kpi-label">CPM Total</div><div class="kpi-value">' + cpm + '</div></div>', unsafe_allow_html=True)
+k4.markdown('<div class="kpi-card"><div class="kpi-label">OPV-P</div><div class="kpi-value">' + ovp + '</div></div>', unsafe_allow_html=True)
+k5.markdown('<div class="kpi-card"><div class="kpi-label">BPM xGS0</div><div class="kpi-value">' + bpm + '</div></div>', unsafe_allow_html=True)
 
 st.markdown('<div class="section-title">Analyse detaillee</div>', unsafe_allow_html=True)
 col_left, col_right = st.columns([1, 1])
