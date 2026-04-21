@@ -5,27 +5,56 @@ import plotly.graph_objects as go
 from pathlib import Path
 
 DB_PATH = Path(__file__).parent.parent.parent / "database" / "scouting_prod.db"
-st.set_page_config(page_title="Profil Joueur", layout="wide", page_icon="!")
+st.set_page_config(page_title="Profil Joueur", layout="wide", page_icon="⚽")
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
-[data-testid="stAppViewContainer"] { background: #0D0F12; }
-[data-testid="stSidebar"] { background: #141720 !important; border-right: 1px solid rgba(255,255,255,0.07); }
-.block-container { padding-top: 2rem; }
-.player-name { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 3px; color: #F0F2F5; line-height: 1; margin-bottom: 12px; }
-.badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-right: 6px; margin-bottom: 6px; border: 1px solid; }
-.badge-red { background: rgba(232,40,26,0.15); color: #E8281A; border-color: rgba(232,40,26,0.4); }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+* { font-family: 'Inter', sans-serif !important; }
+[data-testid="stAppViewContainer"] { background: #111318; }
+[data-testid="stSidebar"] { background: #161920 !important; border-right: 1px solid rgba(255,255,255,0.06); }
+[data-testid="stSidebarNav"] { display: none !important; }
+.block-container { padding-top: 4rem !important; padding-left: 3rem !important; padding-right: 3rem !important; }
+
+.player-name {
+    font-size: 48px; font-weight: 900;
+    color: #F0F2F5; line-height: 1.1;
+    margin-bottom: 14px; letter-spacing: -1px;
+}
+.badge {
+    display: inline-block; padding: 5px 14px;
+    border-radius: 20px; font-size: 12px; font-weight: 600;
+    margin-right: 6px; margin-bottom: 8px; border: 1px solid;
+}
+.badge-red { background: rgba(232,40,26,0.15); color: #E8281A; border-color: rgba(232,40,26,0.35); }
 .badge-gray { background: rgba(255,255,255,0.05); color: #9CA3AF; border-color: rgba(255,255,255,0.1); }
-.kpi-card { background: #141720; border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 16px 20px; text-align: center; }
-.kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #6B7280; margin-bottom: 6px; }
-.kpi-value { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #F0F2F5; line-height: 1; }
-.section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #6B7280; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.07); }
-.bar-wrap { margin-bottom: 12px; }
-.bar-meta { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; color: #9CA3AF; }
-.bar-track { background: rgba(255,255,255,0.06); border-radius: 3px; height: 5px; overflow: hidden; }
+
+.kpi-card {
+    background: #1C2028; border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 20px 24px; text-align: center;
+}
+.kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #6B7280; margin-bottom: 8px; }
+.kpi-value { font-size: 38px; font-weight: 900; color: #F0F2F5; line-height: 1; }
+
+.section-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #6B7280; margin: 32px 0 18px;
+    padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.bar-wrap { margin-bottom: 14px; }
+.bar-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #9CA3AF; }
+.bar-track { background: rgba(255,255,255,0.06); border-radius: 4px; height: 6px; overflow: hidden; }
+
+.sidebar-logo { text-align: center; padding: 20px 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; }
+.sidebar-logo img { width: 90px; border-radius: 10px; margin-bottom: 10px; }
+.sidebar-club { font-size: 14px; font-weight: 700; color: #F0F2F5; }
+.sidebar-season { font-size: 10px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
+.nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.nav-link-icon { font-size: 16px; }
 </style>
 """, unsafe_allow_html=True)
+
+LOGO_URL = "https://raw.githubusercontent.com/martjosnez/scouting-ligue2/main/app/assets/logo_nancy.jpg"
 
 if not DB_PATH.exists():
     st.warning("Base de donnees vide.")
@@ -51,8 +80,18 @@ METRIQUES = ["cpm_total","cpm_scored","cpm_conc","bpm_xgs0_net","gapm_xgs0_net",
 LABELS    = ["CPM Total","CPM Scored","CPM Conc.","BPM xGS0","GAPM xGS0","OPV-P"]
 
 with st.sidebar:
-    st.markdown("### Scouting L2")
-    st.markdown("---")
+    st.markdown(f"""
+    <div class="sidebar-logo">
+        <img src="{LOGO_URL}" onerror="this.style.display='none'">
+        <div class="sidebar-club">AS Nancy Lorraine</div>
+        <div class="sidebar-season">Saison 2025 / 26</div>
+    </div>
+    <div class="nav-link"><span class="nav-link-icon">🏠</span> Accueil</div>
+    <div class="nav-link"><span class="nav-link-icon">👤</span> Profil joueur</div>
+    <div class="nav-link"><span class="nav-link-icon">⚖️</span> Comparaison</div>
+    <div class="nav-link"><span class="nav-link-icon">📋</span> Shortlist</div>
+    <br>
+    """, unsafe_allow_html=True)
     equipes = ["Toutes"] + sorted(joueurs["equipe"].unique().tolist())
     eq = st.selectbox("Equipe", equipes)
     df = joueurs if eq == "Toutes" else joueurs[joueurs["equipe"] == eq]
@@ -65,14 +104,12 @@ with st.sidebar:
 j = df[df["nom"] == joueur_sel].iloc[0]
 
 st.markdown('<div class="player-name">' + str(j["nom"]) + '</div>', unsafe_allow_html=True)
-
 badges = '<span class="badge badge-red">' + str(j["equipe"]) + '</span>'
 badges += '<span class="badge badge-gray">' + str(j["poste"] or "-") + '</span>'
 badges += '<span class="badge badge-gray">' + str(j["role"] or "-") + '</span>'
 badges += '<span class="badge badge-gray">' + str(j["age"]) + ' ans</span>'
 badges += '<span class="badge badge-gray">' + str(j["valeur_m_eur"]) + 'M EUR</span>'
 st.markdown(badges, unsafe_allow_html=True)
-
 st.markdown("<br>", unsafe_allow_html=True)
 
 mins = int(j["minutes"]) if pd.notna(j["minutes"]) else 0
@@ -96,8 +133,8 @@ with col_left:
         pct = min(int((val / maxi) * 100), 100) if maxi > 0 else 0
         color = "#14b8a6" if pct >= 50 else "#E8281A"
         html = '<div class="bar-wrap">'
-        html += '<div class="bar-meta"><span>' + l + '</span><span style="color:' + color + ';font-weight:500">' + str(round(val)) + '</span></div>'
-        html += '<div class="bar-track"><div style="width:' + str(pct) + '%;background:' + color + ';height:5px;border-radius:3px"></div></div>'
+        html += '<div class="bar-meta"><span>' + l + '</span><span style="color:' + color + ';font-weight:600">' + str(round(val)) + '</span></div>'
+        html += '<div class="bar-track"><div style="width:' + str(pct) + '%;background:' + color + ';height:6px;border-radius:4px"></div></div>'
         html += '</div>'
         st.markdown(html, unsafe_allow_html=True)
 
@@ -107,22 +144,22 @@ with col_right:
     fig = go.Figure(go.Scatterpolar(
         r=vn + [vn[0]], theta=LABELS + [LABELS[0]],
         fill="toself",
-        fillcolor="rgba(232,40,26,0.12)",
+        fillcolor="rgba(232,40,26,0.1)",
         line=dict(color="#E8281A", width=2),
     ))
     fig.update_layout(
         polar=dict(
-            bgcolor="#141720",
+            bgcolor="#1C2028",
             radialaxis=dict(visible=True, range=[0,100],
                 tickfont=dict(size=9, color="#555"),
-                gridcolor="#1C2030", linecolor="#1C2030"),
+                gridcolor="#252830", linecolor="#252830"),
             angularaxis=dict(
                 tickfont=dict(size=11, color="#9CA3AF"),
-                gridcolor="#1C2030", linecolor="#1C2030"),
+                gridcolor="#252830", linecolor="#252830"),
         ),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        showlegend=False, height=360,
+        showlegend=False, height=380,
         margin=dict(l=50,r=50,t=30,b=30),
     )
     st.plotly_chart(fig, use_container_width=True)
