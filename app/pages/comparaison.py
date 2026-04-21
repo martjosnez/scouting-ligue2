@@ -7,6 +7,8 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent.parent.parent / "database" / "scouting_prod.db"
 st.set_page_config(page_title="Comparaison", layout="wide", page_icon="⚽")
 
+LOGO_URL = "https://raw.githubusercontent.com/martjosnez/scouting-ligue2/main/app/assets/logo_nancy.jpg"
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
@@ -15,35 +17,30 @@ st.markdown("""
 [data-testid="stSidebar"] { background: #161920 !important; border-right: 1px solid rgba(255,255,255,0.06); }
 [data-testid="stSidebarNav"] { display: none !important; }
 .block-container { padding-top: 4rem !important; padding-left: 3rem !important; padding-right: 3rem !important; }
-
 .page-title { font-size: 48px; font-weight: 900; color: #F0F2F5; line-height: 1.1; margin-bottom: 6px; letter-spacing: -1px; }
 .page-sub { font-size: 13px; color: #6B7280; margin-bottom: 32px; text-transform: uppercase; letter-spacing: 1.5px; }
-
-.player-box {
-    background: #1C2028; border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px; padding: 18px 22px;
-}
+.player-box { background: #1C2028; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 18px 22px; }
 .player-box-name { font-size: 20px; font-weight: 700; color: #F0F2F5; margin-bottom: 4px; }
 .player-box-sub { font-size: 12px; color: #6B7280; }
-
 .vs-label { font-size: 22px; font-weight: 900; color: #E8281A; text-align: center; padding-top: 22px; }
-
-.section-title {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 2px; color: #6B7280; margin: 32px 0 18px;
-    padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-
-.sidebar-logo { text-align: center; padding: 20px 12px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 16px; }
+.section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #6B7280; margin: 32px 0 18px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.sidebar-logo { text-align: center; padding: 20px 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 12px; }
 .sidebar-logo img { width: 90px; border-radius: 10px; margin-bottom: 10px; }
-.sidebar-club { font-size: 14px; font-weight: 700; color: #F0F2F5; }
-.sidebar-season { font-size: 10px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
-.nav-link { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; color: #9CA3AF; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-.nav-link-icon { font-size: 16px; }
+.sidebar-club { font-size: 15px; font-weight: 700; color: #F0F2F5; }
+.sidebar-season { font-size: 11px; color: #4B5563; text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
+div[data-testid="stButton"] button {
+    background: transparent !important; border: none !important;
+    color: #9CA3AF !important; font-size: 15px !important;
+    font-weight: 500 !important; text-align: left !important;
+    padding: 10px 14px !important; border-radius: 8px !important;
+    width: 100% !important;
+}
+div[data-testid="stButton"] button:hover {
+    background: rgba(255,255,255,0.05) !important;
+    color: #F0F2F5 !important;
+}
 </style>
 """, unsafe_allow_html=True)
-
-LOGO_URL = "https://raw.githubusercontent.com/martjosnez/scouting-ligue2/main/app/assets/logo_nancy.jpg"
 
 if not DB_PATH.exists():
     st.warning("Base de donnees vide.")
@@ -74,11 +71,15 @@ with st.sidebar:
         <div class="sidebar-club">AS Nancy Lorraine</div>
         <div class="sidebar-season">Saison 2025 / 26</div>
     </div>
-    <div class="nav-link"><span class="nav-link-icon">🏠</span> Accueil</div>
-    <div class="nav-link"><span class="nav-link-icon">👤</span> Profil joueur</div>
-    <div class="nav-link"><span class="nav-link-icon">⚖️</span> Comparaison</div>
-    <div class="nav-link"><span class="nav-link-icon">📋</span> Shortlist</div>
     """, unsafe_allow_html=True)
+    if st.button("🏠  Accueil", use_container_width=True, key="nav_home"):
+        st.switch_page("main.py")
+    if st.button("👤  Profil joueur", use_container_width=True, key="nav_profil"):
+        st.switch_page("pages/profil.py")
+    if st.button("⚖️  Comparaison", use_container_width=True, key="nav_comp"):
+        st.switch_page("pages/comparaison.py")
+    if st.button("📋  Shortlist", use_container_width=True, key="nav_short"):
+        st.switch_page("pages/shortlist.py")
 
 st.markdown('<div class="page-title">Comparaison</div>', unsafe_allow_html=True)
 st.markdown('<div class="page-sub">Face a face entre deux joueurs</div>', unsafe_allow_html=True)
